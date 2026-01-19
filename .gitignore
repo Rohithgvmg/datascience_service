@@ -1,2 +1,3 @@
 dsenv/
 **/dsenv/
+.env
