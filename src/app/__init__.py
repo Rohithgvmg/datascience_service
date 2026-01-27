@@ -1,13 +1,14 @@
 from flask import Flask
 from flask import request,jsonify
 from service.messageService import MessageService
-
-
+from kafka import KafkaProducer
+import json
 
 app=Flask(__name__)
 app.config.from_pyfile('config.py')
 
 messageService=MessageService()
+producer=KafkaProducer(bootstrap_servers=['localhost:9092'],value_serializer=lambda v:json.dumps(v).encode('utf-8'))
 
 @app.route('/v1/ds/message/',methods=['POST'])
 def handle_message():
@@ -15,9 +16,8 @@ def handle_message():
     result=messageService.process_message(message)
     if result is None:
         return jsonify({"error": "Message is not a valid bank message"}), 400
-        
-    # 'result' is the Pydantic Expense object from LLMService
-    # In Pydantic v2, use .model_dump() instead of .dict()
+    serialized_result=result.json()
+    producer.send('expense_service',serialized_result)
     return jsonify(result.model_dump()), 200
 
 
