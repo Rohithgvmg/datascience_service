@@ -7,7 +7,7 @@ from langchain_core.utils.function_calling import convert_to_openai_tool
 
 from dotenv import load_dotenv,dotenv_values
 import os 
-from schema.Expense import Expense
+from src.app.schema.Expense import Expense
 class LLMService:
     def __init__(self):
         load_dotenv()

@@ -1,5 +1,5 @@
-from utils.messageUtil import MessageUtil
-from service.llmService import LLMService
+from src.app.utils.messageUtil import MessageUtil
+from src.app.service.llmService import LLMService
 from flask import request,jsonify
 
 class MessageService:

@@ -1,31 +1,31 @@
-from flask import Flask
-from flask import request,jsonify
-from service.messageService import MessageService
-from kafka import KafkaProducer
-import json
+# from flask import Flask
+# from flask import request,jsonify
+# from src.app.service.messageService import MessageService
+# from kafka import KafkaProducer
+# import json
 
-app=Flask(__name__)
-app.config.from_pyfile('config.py')
+# app=Flask(__name__)
+# app.config.from_pyfile('config.py')
 
-messageService=MessageService()
-producer=KafkaProducer(bootstrap_servers=['localhost:9092'],value_serializer=lambda v:json.dumps(v).encode('utf-8'))
+# messageService=MessageService()
+# producer=KafkaProducer(bootstrap_servers=['userinfo_kafka:9092'],value_serializer=lambda v:json.dumps(v).encode('utf-8'))
 
-@app.route('/v1/ds/message/',methods=['POST'])
-def handle_message():
-    message=request.json.get('message')
-    result=messageService.process_message(message)
-    if result is None:
-        return jsonify({"error": "Message is not a valid bank message"}), 400
-    serialized_result=result.json()
-    producer.send('expense_service',serialized_result)
-    return jsonify(result.model_dump()), 200
+# @app.route('/v1/ds/message/',methods=['POST'])
+# def handle_message():
+#     message=request.json.get('message')
+#     result=messageService.process_message(message)
+#     if result is None:
+#         return jsonify({"error": "Message is not a valid bank message"}), 400
+#     serialized_result=result.model_dump()
+#     producer.send('expense_service',serialized_result)
+#     return jsonify(result.model_dump()), 200
 
 
 
-@app.route("/",methods=['GET'])
-def handle_get():
-    print("Hello world")
+# @app.route("/",methods=['GET'])
+# def handle_get():
+#     print("Hello world")
 
-if __name__ == "__main__":
-    app.run(host="localhost",port=8000,debug=True)
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0",port=8010,debug=True)
 
